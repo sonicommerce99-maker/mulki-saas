@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FinancialTransaction, Currency, Organization, Unit } from '../../types';
 import { Language, translations } from '../../locales/translations';
+import { FinancialAuditReportModal } from './FinancialAuditReportModal';
 import { 
   DollarSign, 
   ArrowUpRight, 
@@ -11,7 +12,9 @@ import {
   X, 
   Check, 
   Building2, 
-  FileText
+  FileText,
+  FileSpreadsheet,
+  Download
 } from 'lucide-react';
 
 interface InvoicingViewProps {
@@ -35,6 +38,7 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
   const [filterType, setFilterType] = useState<'all' | 'income' | 'expense'>('all');
   const [activeInvoice, setActiveInvoice] = useState<FinancialTransaction | null>(null);
   const [isNewTxModalOpen, setIsNewTxModalOpen] = useState(false);
+  const [isAuditReportModalOpen, setIsAuditReportModalOpen] = useState(false);
 
   // New Transaction Form state
   const [newTxType, setNewTxType] = useState<'income' | 'expense'>('income');
@@ -112,11 +116,59 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
     window.print();
   };
 
+  // CSV Generator compatible with regional Arabic & English Excel
+  const handleExportCSV = () => {
+    const headers = [
+      'Transaction Ref / رقم القيد',
+      'Date / التاريخ',
+      'Property / العقار',
+      'Unit / الوحدة',
+      'Counterparty / المستأجر أو الطرف المستفيد',
+      'Category / التصنيف المحاسبي',
+      'Type / نوع القيد',
+      'Base Taxable Amount / المبلغ الخاضع للضريبة',
+      'VAT Rate / نسبة الضريبة (15%)',
+      'VAT Amount / مبلغ ضريبة القيمة المضافة',
+      'Total Amount / الإجمالي شامل الضريبة',
+      'Currency / العملة',
+      'Payment Method / وسيلة السداد',
+      'Tax Number / الرقم الضريبي ZATCA',
+    ];
+
+    const rows = filteredTx.map((tx) => [
+      `"${tx.reference_number}"`,
+      `"${tx.date}"`,
+      `"${tx.property_name_ar || tx.property_name_en}"`,
+      `"${tx.unit_number || 'عام'}"`,
+      `"${tx.tenant_name || 'جهة معتمدة'}"`,
+      `"${lang === 'ar' ? tx.category_ar : tx.category_en}"`,
+      `"${tx.type === 'income' ? (lang === 'ar' ? 'إيراد إيجار' : 'Income') : (lang === 'ar' ? 'مصروف تشغيلي' : 'Expense')}"`,
+      (tx.base_amount || tx.amount).toFixed(2),
+      '15%',
+      tx.vat_amount.toFixed(2),
+      tx.total_amount.toFixed(2),
+      `"${tx.currency}"`,
+      `"${tx.payment_method}"`,
+      `"${org.vat_number || '310892049100003'}"`,
+    ]);
+
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Mulki_Financial_Transactions_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <div>
           <div className="flex items-center gap-2">
             <DollarSign className="w-5 h-5 text-[#0F5A47]" />
@@ -129,13 +181,36 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={() => setIsNewTxModalOpen(true)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-white bg-[#0F5A47] hover:bg-[#0c4839] rounded-xl shadow-sm transition-colors whitespace-nowrap"
-        >
-          <Plus className="w-4 h-4" />
-          <span>{lang === 'ar' ? 'تسجيل قيد مالي جديد' : 'Log Transaction'}</span>
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* CSV Export Button */}
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-xs transition-colors cursor-pointer"
+            title="تصدير سجل القيود كملف Excel / CSV متوافق مع اللغة العربية"
+          >
+            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
+            <span>{lang === 'ar' ? 'تصدير إكسل (CSV)' : 'Export CSV'}</span>
+          </button>
+
+          {/* Audit Report PDF Button */}
+          <button
+            onClick={() => setIsAuditReportModalOpen(true)}
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl shadow-xs transition-colors cursor-pointer"
+            title="استعراض وطباعة التقرير المالي والضريبي المعتمد"
+          >
+            <Printer className="w-4 h-4 text-amber-700" />
+            <span>{lang === 'ar' ? 'التقرير الضريبي (PDF) 📄' : 'Audit Report (PDF)'}</span>
+          </button>
+
+          {/* New Transaction Button */}
+          <button
+            onClick={() => setIsNewTxModalOpen(true)}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#0F5A47] hover:bg-[#0c4839] rounded-xl shadow-xs transition-colors whitespace-nowrap cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>{lang === 'ar' ? 'تسجيل قيد مالي' : 'Log Transaction'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Financial Summary Cards */}
@@ -203,23 +278,45 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
 
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2">
-        {(['all', 'income', 'expense'] as const).map((filter) => (
+      {/* Filter Tabs & Quick Table Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          {(['all', 'income', 'expense'] as const).map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setFilterType(filter)}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
+                filterType === filter
+                  ? 'bg-[#0F5A47] text-white shadow-xs'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              {filter === 'all' ? (lang === 'ar' ? 'كافة القيود' : 'All Entries') :
+               filter === 'income' ? (lang === 'ar' ? 'الإيرادات والسندات' : 'Income') :
+               (lang === 'ar' ? 'المصروفات والتكاليف' : 'Expenses')}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+          <span>{lang === 'ar' ? `المعروض: ${filteredTx.length} قيد محاسبي` : `Showing: ${filteredTx.length} records`}</span>
+          <span className="text-slate-300">·</span>
           <button
-            key={filter}
-            onClick={() => setFilterType(filter)}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-              filterType === filter
-                ? 'bg-[#0F5A47] text-white shadow-xs'
-                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-            }`}
+            onClick={handleExportCSV}
+            className="text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 hover:underline cursor-pointer"
           >
-            {filter === 'all' ? (lang === 'ar' ? 'كافة القيود' : 'All Entries') :
-             filter === 'income' ? (lang === 'ar' ? 'الإيرادات والسندات' : 'Income') :
-             (lang === 'ar' ? 'المصروفات والتكاليف' : 'Expenses')}
+            <Download className="w-3.5 h-3.5" />
+            <span>CSV</span>
           </button>
-        ))}
+          <span className="text-slate-300">·</span>
+          <button
+            onClick={() => setIsAuditReportModalOpen(true)}
+            className="text-slate-700 hover:text-slate-900 font-bold flex items-center gap-1 hover:underline cursor-pointer"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span>PDF</span>
+          </button>
+        </div>
       </div>
 
       {/* Transactions Ledger Table */}
@@ -526,6 +623,16 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Certified Financial & Tax Audit Report Modal (PDF / CSV) */}
+      <FinancialAuditReportModal
+        isOpen={isAuditReportModalOpen}
+        onClose={() => setIsAuditReportModalOpen(false)}
+        transactions={transactions}
+        org={org}
+        currency={currency}
+        lang={lang}
+      />
 
     </div>
   );

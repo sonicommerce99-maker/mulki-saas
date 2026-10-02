@@ -29,7 +29,7 @@ export const mockProperties: Property[] = [
     occupied_units: 44,
     vacant_units: 3,
     maintenance_units: 1,
-    image_url: '/src/assets/images/aqar_luxury_compound_1790879557253.jpg',
+    image_url: '/images/aqar_luxury_compound_1790879557253.jpg',
     monthly_revenue: 380000,
   },
   {
@@ -46,7 +46,7 @@ export const mockProperties: Property[] = [
     occupied_units: 74,
     vacant_units: 4,
     maintenance_units: 2,
-    image_url: '/src/assets/images/aqar_dubai_tower_1790879568628.jpg',
+    image_url: '/images/aqar_dubai_tower_1790879568628.jpg',
     monthly_revenue: 520000,
   },
   {
@@ -63,7 +63,7 @@ export const mockProperties: Property[] = [
     occupied_units: 23,
     vacant_units: 2,
     maintenance_units: 1,
-    image_url: '/src/assets/images/aqar_commercial_plaza_1790879579789.jpg',
+    image_url: '/images/aqar_commercial_plaza_1790879579789.jpg',
     monthly_revenue: 290000,
   },
 ];

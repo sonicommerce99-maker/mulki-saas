@@ -29,14 +29,18 @@
   <body class="bg-[#F8FAFC] text-slate-900 antialiased selection:bg-[#0F5A47] selection:text-white">
     <div id="root"></div>
     
-    <!-- PWA Service Worker Registration -->
+    <!-- App Entry Point (Loads First) -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- PWA Service Worker Registration & Self-Heal -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            reg.update();
+          }).catch(() => {});
         });
       }
     </script>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

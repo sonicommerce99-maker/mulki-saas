@@ -108,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <div className="w-9 h-9 rounded-xl overflow-hidden shadow-xs border border-emerald-900/30 group-hover:scale-105 transition-transform shrink-0 bg-[#0F5A47]">
                 <img
-                  src="/src/assets/images/mulki_app_icon_1790939915200.jpg"
+                  src="/app-logo.jpg"
                   alt="Mulki"
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"

@@ -57,7 +57,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl overflow-hidden border border-white/20 shadow-md shrink-0 bg-[#0F5A47]">
               <img
-                src="/src/assets/images/mulki_app_icon_1790939915200.jpg"
+                src="/app-logo.jpg"
                 alt="Mulki App Icon"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
@@ -88,7 +88,7 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
         <div className="mx-5 sm:mx-6 mt-4 p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center gap-3.5">
           <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-lg border-2 border-emerald-600/30 shrink-0 bg-[#0F5A47]">
             <img
-              src="/src/assets/images/mulki_app_icon_1790939915200.jpg"
+              src="/app-logo.jpg"
               alt="Mulki"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"

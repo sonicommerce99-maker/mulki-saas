@@ -28,7 +28,7 @@ import { Building2, User, Wrench, Shield, CheckCircle2, MessageSquare, Layers, B
 
 export default function App() {
   const [lang, setLang] = useState<Language>('ar');
-  const [currentTab, setCurrentTab] = useState<string>('superadmin');
+  const [currentTab, setCurrentTab] = useState<string>('dashboard');
   const [currentRole, setCurrentRole] = useState<UserRole>('super_admin');
   const [currency, setCurrency] = useState<Currency>('SAR');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
@@ -290,7 +290,7 @@ export default function App() {
               setCurrentTab('superadmin');
             }}
           />
-        ) : currentRole === 'super_admin' || currentTab === 'superadmin' ? (
+        ) : currentTab === 'superadmin' ? (
           /* VIEW 1: SUPER ADMIN SAAS OWNER DASHBOARD */
           <SuperAdminDashboard
             lang={lang}

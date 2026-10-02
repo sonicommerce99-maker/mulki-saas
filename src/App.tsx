@@ -186,7 +186,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col text-slate-900">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col text-slate-900 overflow-x-hidden w-full max-w-full">
       
       {/* Single Unified Responsive Navbar (Vue unique, propre et ultra-organisée) */}
       <Navbar
@@ -214,67 +214,67 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-6 overflow-x-hidden">
 
         {/* Workspace Mode Status Pill (Clean Mode vs Demo Mode) */}
         {isCleanWorkspace && (
-          <div className="bg-blue-50 border border-blue-200 text-blue-950 p-3 rounded-2xl flex items-center justify-between text-xs">
+          <div className="bg-blue-50 border border-blue-200 text-blue-950 p-3 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-              <span className="font-bold">أنت الآن في وضع مساحة العمل النظيفة (Clean Mode): المنصة فارغة وجاهزة لإدخال بيانات عقاراتك الفعلية.</span>
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0" />
+              <span className="font-bold">أنت الآن في وضع مساحة العمل النظيفة (Clean Mode): المنصة فارغة وجاهزة لإدخال عقاراتك الفعلية.</span>
             </div>
             <button
               onClick={handleToggleCleanMode}
-              className="px-3 py-1 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition-colors"
+              className="px-3 py-1.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition-colors self-start sm:self-auto"
             >
               استعادة البيانات التوضيحية للعرض
             </button>
           </div>
         )}
 
-        {/* Limited-time Free Adopter Banner (مجاني لعدد محدود من المستخدمين) */}
-        <div className="bg-gradient-to-r from-amber-50 via-emerald-50/60 to-amber-50 rounded-2xl p-4 border border-amber-200/80 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-xs text-base">
+        {/* Limited-time Free Adopter Banner (Responsive Mobile & Desktop) */}
+        <div className="bg-gradient-to-r from-amber-50 via-emerald-50/60 to-amber-50 rounded-2xl p-3.5 sm:p-4 border border-amber-200/80 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs overflow-hidden">
+          <div className="flex items-start sm:items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-xs text-sm sm:text-base">
               🎁
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="font-black text-slate-900 text-sm">
-                  {lang === 'ar' ? 'عرض الإطلاق الحصري: اشتراك مجاني كامل لأول 50 شركة عقارية' : 'Launch Offer: 100% Free Full License for First 50 Real Estate Firms'}
+              <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
+                <span className="font-black text-slate-900 text-xs sm:text-sm">
+                  {lang === 'ar' ? 'عرض الإطلاق: اشتراك مجاني كامل لأول 50 شركة عقارية' : 'Launch Offer: Free License for First 50 Firms'}
                 </span>
                 <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300">
-                  {lang === 'ar' ? 'متبقي 7 مقاعد مجانية فقط' : 'Only 7 Free Slots Left'}
+                  {lang === 'ar' ? 'متبقي 7 مقاعد مجانية' : '7 Free Slots Left'}
                 </span>
               </div>
-              <p className="text-slate-600 text-xs">
+              <p className="text-slate-600 text-[11px] sm:text-xs">
                 {lang === 'ar'
-                  ? 'تم حجز 43 مقعداً حتى الآن · يشمل كافة مزايا إدارة العقارات، الفوترة ZATCA، وأتمتة الواتساب مدى الحياة مجاناً.'
+                  ? 'تم حجز 43 مقعداً حتى الآن · يشمل كافة المزايا، الفوترة ZATCA، وأتمتة الواتساب مدى الحياة مجاناً.'
                   : '43 licenses claimed · Full access to property management, ZATCA e-invoicing, and WhatsApp automation.'}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto shrink-0 pt-1 md:pt-0">
             <button
               onClick={() => setIsPricingModalOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black shadow-xs flex items-center justify-center gap-1 transition-colors cursor-pointer text-xs"
             >
               <span>💎</span>
-              <span>{lang === 'ar' ? 'الباقات والأسعار' : 'Pricing Plans'}</span>
+              <span>{lang === 'ar' ? 'الباقات' : 'Pricing'}</span>
             </button>
             <button
               onClick={() => setIsGuideModalOpen(true)}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold border border-slate-200 shadow-xs flex items-center gap-1.5 transition-colors"
+              className="flex-1 md:flex-initial px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold border border-slate-200 shadow-xs flex items-center justify-center gap-1 transition-colors text-xs"
             >
               <BookOpen className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{lang === 'ar' ? 'دليل الاستخدام 📖' : 'User Guide 📖'}</span>
+              <span>{lang === 'ar' ? 'الدليل' : 'Guide'}</span>
             </button>
             <button
               onClick={() => setIsPricingModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-[#0F5A47] hover:bg-[#0c4839] text-white font-bold shadow-xs transition-colors cursor-pointer"
+              className="w-full sm:w-auto md:flex-initial px-3.5 py-1.5 rounded-xl bg-[#0F5A47] hover:bg-[#0c4839] text-white font-bold shadow-xs transition-colors cursor-pointer text-center text-xs"
             >
-              {lang === 'ar' ? 'حجز المقعد المجاني' : 'Claim Free License'}
+              {lang === 'ar' ? 'حجز المقعد المجاني' : 'Claim Free'}
             </button>
           </div>
         </div>

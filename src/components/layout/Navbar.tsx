@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { UserRole, Currency } from '../../types';
 import { Language, translations } from '../../locales/translations';
+import { MulkiLogo } from './MulkiLogo';
 import { 
   Building2, 
   Globe2, 
@@ -88,15 +89,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-xs">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-2">
+    <header className="sticky top-0 z-40 bg-white border-b border-slate-200/90 shadow-xs w-full max-w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
           
           {/* 1. BRAND LOGO + MOBILE HAMBURGER */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors shrink-0"
               aria-label="القائمة"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -104,23 +105,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => setCurrentTab('dashboard')}
-              className="flex items-center gap-2 focus:outline-none group text-start"
+              className="focus:outline-none group text-start shrink-0 cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-xs border border-emerald-900/30 group-hover:scale-105 transition-transform shrink-0 bg-[#0F5A47]">
-                <img
-                  src="/app-logo.jpg"
-                  alt="Mulki"
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
+              <div className="hidden sm:block">
+                <MulkiLogo lang={lang} size="md" showSubtitle={true} />
               </div>
-              <div>
-                <span className="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1">
-                  <span>{lang === 'ar' ? 'مُلكي' : 'Mulki'}</span>
-                  <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 uppercase">
-                    SAAS
-                  </span>
-                </span>
+              <div className="sm:hidden">
+                <MulkiLogo lang={lang} size="sm" showSubtitle={false} />
               </div>
             </button>
           </div>
@@ -223,8 +214,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
 
-          {/* 3. RIGHT CONTROLS: ORGANIZED, COMPACT, NEVER OVERFLOWING */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* 3. RIGHT CONTROLS: COMPACT, BALANCED, ZERO MOBILE OVERFLOW */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             
             {/* Limited-time Free Adopter Badge (Clickable to open Pricing modal) */}
             <button
@@ -236,32 +227,31 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>{lang === 'ar' ? 'مجاني لأول 50 شركة (متبقي 7)' : 'Free for first 50 firms (7 left)'}</span>
             </button>
 
-            {/* User Guide Button (Aide d'utilisation) */}
+            {/* User Guide Button (Desktop / Tablet only - Mobile has it in Drawer) */}
             <button
               onClick={onOpenGuideModal}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-colors shadow-xs"
+              className="hidden md:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-xl transition-colors shadow-xs"
               title="دليل الاستخدام والتشغيل السريع (User Guide)"
             >
               <BookOpen className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              <span className="hidden sm:inline">{lang === 'ar' ? 'دليل الاستخدام 📖' : 'User Guide 📖'}</span>
-              <span className="sm:hidden">📖 دليل</span>
+              <span>{lang === 'ar' ? 'دليل الاستخدام 📖' : 'User Guide 📖'}</span>
             </button>
 
             {/* PWA Install Button */}
             <button
               onClick={onOpenInstallModal}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors border border-slate-200"
+              className="flex items-center gap-1 p-1.5 sm:px-2.5 sm:py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors border border-slate-200"
               title="تثبيت التطبيق على الكمبيوتر، الآيفون أو الأندرويد"
             >
-              <Download className="w-3.5 h-3.5 text-slate-500" />
+              <Download className="w-3.5 h-3.5 text-emerald-700" />
               <span className="hidden md:inline">{lang === 'ar' ? 'تثبيت التطبيق' : 'Install App'}</span>
             </button>
 
-            {/* ORGANIZED "MORE TOOLS" DROPDOWN (Prevents clutter) */}
-            <div className="relative" ref={dropdownRef}>
+            {/* ORGANIZED "MORE TOOLS" DROPDOWN (Desktop/Tablet only - Mobile in Drawer) */}
+            <div className="hidden sm:block relative" ref={dropdownRef}>
               <button
                 onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
-                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold text-slate-700 bg-white hover:bg-slate-100 rounded-xl border border-slate-200 transition-colors cursor-pointer"
                 title="أدوات متقدمة"
               >
                 <span>{lang === 'ar' ? 'الأدوات' : 'Tools'}</span>
@@ -434,8 +424,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
 
-            {/* ROLE SWITCHER DROPDOWN (Clean & Unified) */}
-            <div className="relative flex items-center bg-slate-100 border border-slate-200 rounded-xl p-0.5">
+            {/* ROLE SWITCHER DROPDOWN (Mobile Compact & Responsive) */}
+            <div className="relative flex items-center bg-slate-100 border border-slate-200 rounded-xl p-0.5 max-w-[115px] sm:max-w-none">
               <select
                 value={currentRole}
                 onChange={(e) => {
@@ -447,14 +437,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setCurrentTab('investor');
                   }
                 }}
-                className="bg-transparent text-xs font-bold text-slate-800 py-1 px-2 focus:outline-none cursor-pointer"
+                className="bg-transparent text-[11px] sm:text-xs font-bold text-slate-800 py-1 px-1.5 sm:px-2 focus:outline-none cursor-pointer truncate max-w-full"
                 title={t.switchRole}
               >
-                <option value="super_admin">👑 مالك المنصة (Super Admin)</option>
-                <option value="admin">🏢 {t.adminRole} (شركة إتقان)</option>
-                <option value="investor">💼 المستثمر (VIP Investor)</option>
-                <option value="technician">🔧 {t.technicianRole}</option>
-                <option value="tenant">👤 {t.tenantRole}</option>
+                <option value="super_admin">👑 مالك المنصة</option>
+                <option value="admin">🏢 إدارة الأملاك</option>
+                <option value="investor">💼 المستثمر</option>
+                <option value="technician">🔧 فني صيانة</option>
+                <option value="tenant">👤 المستأجر</option>
               </select>
             </div>
 

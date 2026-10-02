@@ -143,25 +143,25 @@ export const PricingPlansModal: React.FC<PricingPlansModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-5xl w-full border border-slate-200 shadow-2xl overflow-hidden my-4 flex flex-col max-h-[92vh]">
+    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-2 sm:p-5 overflow-y-auto w-full max-w-full">
+      <div className="bg-white rounded-3xl max-w-5xl w-full border border-slate-200 shadow-2xl overflow-hidden my-2 sm:my-4 flex flex-col max-h-[92vh]">
         
         {/* Header */}
-        <div className="p-6 bg-gradient-to-r from-slate-950 via-slate-900 to-[#0F5A47] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg shrink-0">
+        <div className="p-4 sm:p-6 bg-gradient-to-r from-slate-950 via-slate-900 to-[#0F5A47] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black text-lg sm:text-xl shadow-lg shrink-0">
               💎
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-lg sm:text-xl font-black">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-base sm:text-xl font-black">
                   {lang === 'ar' ? 'باقات الاشتراك وأسعار منصة مُلكي' : 'Mulki Subscription Plans & Pricing'}
                 </h2>
                 <span className="text-[10px] bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
                   {lang === 'ar' ? 'عروض خاصة' : 'Special Rates'}
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5">
                 {lang === 'ar'
                   ? 'أسعار شفافة ومدروسة لجذب الملاك والشركات العقارية مع إمكانية البدء مجاناً 100%'
                   : 'Transparent, conversion-focused plans to attract property owners with zero upfront risk'}
@@ -169,7 +169,7 @@ export const PricingPlansModal: React.FC<PricingPlansModalProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-3 self-end sm:self-auto">
+          <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto">
             {/* Monthly / Annual Toggle */}
             <div className="bg-white/10 p-1 rounded-2xl border border-white/20 flex items-center text-xs font-bold">
               <button

@@ -3,6 +3,10 @@ import { FinancialTransaction, Currency, Organization, Unit } from '../../types'
 import { Language, translations } from '../../locales/translations';
 import { FinancialAuditReportModal } from './FinancialAuditReportModal';
 import { 
+  exportTransactionsToZatcaCSV, 
+  exportTransactionsToZatcaPDF 
+} from '../../utils/zatcaReportExporter';
+import { 
   DollarSign, 
   ArrowUpRight, 
   ArrowDownRight, 
@@ -116,52 +120,14 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
     window.print();
   };
 
-  // CSV Generator compatible with regional Arabic & English Excel
+  // ZATCA-compliant Data-to-Blob CSV Downloader
   const handleExportCSV = () => {
-    const headers = [
-      'Transaction Ref / رقم القيد',
-      'Date / التاريخ',
-      'Property / العقار',
-      'Unit / الوحدة',
-      'Counterparty / المستأجر أو الطرف المستفيد',
-      'Category / التصنيف المحاسبي',
-      'Type / نوع القيد',
-      'Base Taxable Amount / المبلغ الخاضع للضريبة',
-      'VAT Rate / نسبة الضريبة (15%)',
-      'VAT Amount / مبلغ ضريبة القيمة المضافة',
-      'Total Amount / الإجمالي شامل الضريبة',
-      'Currency / العملة',
-      'Payment Method / وسيلة السداد',
-      'Tax Number / الرقم الضريبي ZATCA',
-    ];
+    exportTransactionsToZatcaCSV(filteredTx, org, currency, lang);
+  };
 
-    const rows = filteredTx.map((tx) => [
-      `"${tx.reference_number}"`,
-      `"${tx.date}"`,
-      `"${tx.property_name_ar || tx.property_name_en}"`,
-      `"${tx.unit_number || 'عام'}"`,
-      `"${tx.tenant_name || 'جهة معتمدة'}"`,
-      `"${lang === 'ar' ? tx.category_ar : tx.category_en}"`,
-      `"${tx.type === 'income' ? (lang === 'ar' ? 'إيراد إيجار' : 'Income') : (lang === 'ar' ? 'مصروف تشغيلي' : 'Expense')}"`,
-      (tx.base_amount || tx.amount).toFixed(2),
-      '15%',
-      tx.vat_amount.toFixed(2),
-      tx.total_amount.toFixed(2),
-      `"${tx.currency}"`,
-      `"${tx.payment_method}"`,
-      `"${org.vat_number || '310892049100003'}"`,
-    ]);
-
-    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `Mulki_Financial_Transactions_${new Date().toISOString().split('T')[0]}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+  // ZATCA-compliant Data-to-Blob PDF Downloader
+  const handleExportPDF = () => {
+    exportTransactionsToZatcaPDF(filteredTx, org, currency, lang);
   };
 
   return (
@@ -182,30 +148,40 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          {/* CSV Export Button */}
+          {/* Export to CSV Button */}
           <button
             onClick={handleExportCSV}
-            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-xs transition-colors cursor-pointer"
-            title="تصدير سجل القيود كملف Excel / CSV متوافق مع اللغة العربية"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl shadow-xs transition-all cursor-pointer group active:scale-95"
+            title="تصدير كملف CSV مطابق لمتطلبات هيئة الزكاة والضريبة والجمارك (ZATCA)"
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-            <span>{lang === 'ar' ? 'تصدير إكسل (CSV)' : 'Export CSV'}</span>
+            <FileSpreadsheet className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
+            <span>{lang === 'ar' ? 'تصدير كملف CSV' : 'Export to CSV'}</span>
           </button>
 
-          {/* Audit Report PDF Button */}
+          {/* Export to PDF Button */}
+          <button
+            onClick={handleExportPDF}
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-xl shadow-xs transition-all cursor-pointer group active:scale-95"
+            title="توليد وتنزيل تقرير PDF معتمد ومطابق لـ ZATCA Phase 2"
+          >
+            <Download className="w-4 h-4 text-emerald-700 group-hover:scale-110 transition-transform" />
+            <span>{lang === 'ar' ? 'تصدير كتقرير PDF' : 'Export to PDF'}</span>
+          </button>
+
+          {/* Detailed Audit Statement Modal Preview */}
           <button
             onClick={() => setIsAuditReportModalOpen(true)}
-            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl shadow-xs transition-colors cursor-pointer"
-            title="استعراض وطباعة التقرير المالي والضريبي المعتمد"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl shadow-xs transition-all cursor-pointer"
+            title="معاينة كشف الحساب والتقرير الشامل للطباعة"
           >
-            <Printer className="w-4 h-4 text-amber-700" />
-            <span>{lang === 'ar' ? 'التقرير الضريبي (PDF) 📄' : 'Audit Report (PDF)'}</span>
+            <Printer className="w-4 h-4 text-slate-600" />
+            <span>{lang === 'ar' ? 'معاينة التقرير' : 'Preview Report'}</span>
           </button>
 
           {/* New Transaction Button */}
           <button
             onClick={() => setIsNewTxModalOpen(true)}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#0F5A47] hover:bg-[#0c4839] rounded-xl shadow-xs transition-colors whitespace-nowrap cursor-pointer"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-bold text-white bg-[#0F5A47] hover:bg-[#0c4839] rounded-xl shadow-xs transition-all whitespace-nowrap cursor-pointer active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>{lang === 'ar' ? 'تسجيل قيد مالي' : 'Log Transaction'}</span>
@@ -304,17 +280,27 @@ export const InvoicingView: React.FC<InvoicingViewProps> = ({
           <button
             onClick={handleExportCSV}
             className="text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 hover:underline cursor-pointer"
+            title="Export to CSV"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5" />
+            <span>Export to CSV</span>
+          </button>
+          <span className="text-slate-300">·</span>
+          <button
+            onClick={handleExportPDF}
+            className="text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 hover:underline cursor-pointer"
+            title="Export to PDF"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>CSV</span>
+            <span>Export to PDF</span>
           </button>
           <span className="text-slate-300">·</span>
           <button
             onClick={() => setIsAuditReportModalOpen(true)}
             className="text-slate-700 hover:text-slate-900 font-bold flex items-center gap-1 hover:underline cursor-pointer"
           >
-            <FileText className="w-3.5 h-3.5" />
-            <span>PDF</span>
+            <Printer className="w-3.5 h-3.5" />
+            <span>{lang === 'ar' ? 'معاينة التقرير' : 'Preview Report'}</span>
           </button>
         </div>
       </div>

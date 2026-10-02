@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { FinancialTransaction, Currency, Organization } from '../../types';
 import { Language } from '../../locales/translations';
 import { 
+  exportTransactionsToZatcaCSV, 
+  exportTransactionsToZatcaPDF 
+} from '../../utils/zatcaReportExporter';
+import { 
   Printer, 
   Download, 
   FileSpreadsheet, 
@@ -161,21 +165,34 @@ export const FinancialAuditReportModal: React.FC<FinancialAuditReportModalProps>
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+            {/* Export to CSV */}
             <button
-              onClick={handleExportCSV}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-1.5 transition-colors border border-slate-700 cursor-pointer shadow-xs"
-              title="تنزيل كملف Excel / CSV متوافق مع اللغة العربية"
+              onClick={() => exportTransactionsToZatcaCSV(filtered, org, currency, lang)}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center gap-1.5 transition-all border border-slate-700 cursor-pointer shadow-xs active:scale-95"
+              title="تنزيل كملف Excel / CSV معتمد وفق متطلبات ZATCA"
             >
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
-              <span>{lang === 'ar' ? 'تصدير إكسل (CSV)' : 'Export CSV'}</span>
+              <span>{lang === 'ar' ? 'تصدير كملف CSV' : 'Export to CSV'}</span>
             </button>
 
+            {/* Export to PDF Blob */}
+            <button
+              onClick={() => exportTransactionsToZatcaPDF(filtered, org, currency, lang)}
+              className="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer active:scale-95"
+              title="توليد وتنزيل ملف PDF فوري معتمد"
+            >
+              <Download className="w-4 h-4 text-amber-300" />
+              <span>{lang === 'ar' ? 'تصدير كتقرير PDF' : 'Export to PDF'}</span>
+            </button>
+
+            {/* Print Dialog */}
             <button
               onClick={handlePrint}
-              className="px-4 py-2 rounded-xl bg-[#0F5A47] hover:bg-[#0c4839] text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-md cursor-pointer"
+              className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all border border-slate-700 cursor-pointer"
+              title="طباعة مباشرة"
             >
-              <Printer className="w-4 h-4 text-amber-300" />
-              <span>{lang === 'ar' ? 'طباعة / حفظ PDF 📄' : 'Print / Save PDF 📄'}</span>
+              <Printer className="w-3.5 h-3.5 text-slate-400" />
+              <span>{lang === 'ar' ? 'طباعة' : 'Print'}</span>
             </button>
 
             <button

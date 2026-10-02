@@ -21,7 +21,8 @@ import {
   Wrench,
   FileText,
   BookOpen,
-  Gift
+  Gift,
+  Crown
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -40,9 +41,12 @@ interface NavbarProps {
   onOpenReceiptModal: () => void;
   onOpenInstallModal: () => void;
   onOpenGuideModal: () => void;
+  onOpenPricingModal: () => void;
   onOpenTermsModal: () => void;
   isTestingSuspendedView?: boolean;
   onToggleSuspendedView?: () => void;
+  isCleanMode?: boolean;
+  onToggleCleanMode?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -61,9 +65,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenReceiptModal,
   onOpenInstallModal,
   onOpenGuideModal,
+  onOpenPricingModal,
   onOpenTermsModal,
   isTestingSuspendedView,
   onToggleSuspendedView,
+  isCleanMode,
+  onToggleCleanMode,
 }) => {
   const t = translations[lang];
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
@@ -99,8 +106,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setCurrentTab('dashboard')}
               className="flex items-center gap-2 focus:outline-none group text-start"
             >
-              <div className="w-9 h-9 rounded-xl bg-[#0F5A47] flex items-center justify-center text-white shadow-xs group-hover:scale-105 transition-transform">
-                <Building2 className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden shadow-xs border border-emerald-900/30 group-hover:scale-105 transition-transform shrink-0 bg-[#0F5A47]">
+                <img
+                  src="/src/assets/images/mulki_app_icon_1790939915200.jpg"
+                  alt="Mulki"
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
               </div>
               <div>
                 <span className="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1">
@@ -214,11 +226,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* 3. RIGHT CONTROLS: ORGANIZED, COMPACT, NEVER OVERFLOWING */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             
-            {/* Limited-time Free Adopter Badge */}
-            <div className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold">
+            {/* Limited-time Free Adopter Badge (Clickable to open Pricing modal) */}
+            <button
+              onClick={onOpenPricingModal}
+              className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 text-xs font-bold transition-colors cursor-pointer"
+              title="باقات الأسعار وعرض الإطلاق المجاني"
+            >
               <Gift className="w-3.5 h-3.5 text-amber-600 animate-bounce" />
               <span>{lang === 'ar' ? 'مجاني لأول 50 شركة (متبقي 7)' : 'Free for first 50 firms (7 left)'}</span>
-            </div>
+            </button>
 
             {/* User Guide Button (Aide d'utilisation) */}
             <button
@@ -258,6 +274,40 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
                     أدوات وإجراءات سريعة
                   </div>
+
+                  <button
+                    onClick={() => {
+                      onOpenPricingModal();
+                      setToolsDropdownOpen(false);
+                    }}
+                    className="w-full text-start px-3 py-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-50 font-medium flex items-center gap-2.5 transition-colors"
+                  >
+                    <Crown className="w-4 h-4 text-amber-500" />
+                    <div>
+                      <div className="font-bold">باقات الأسعار والاشتراكات 💎</div>
+                      <div className="text-[10px] text-slate-400">باقة الرواد المجانية وباقات النمو</div>
+                    </div>
+                  </button>
+
+                  {onToggleCleanMode && (
+                    <button
+                      onClick={() => {
+                        onToggleCleanMode();
+                        setToolsDropdownOpen(false);
+                      }}
+                      className="w-full text-start px-3 py-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-50 font-medium flex items-center gap-2.5 transition-colors"
+                    >
+                      <Sparkles className="w-4 h-4 text-emerald-600" />
+                      <div>
+                        <div className="font-bold">
+                          {isCleanMode ? 'استعادة البيانات التجريبية (Demo)' : 'تصفير المنصة للبدء الفعلي (Clean)'}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {isCleanMode ? 'إظهار عقارات وأرقام للعرض' : 'مساحة عمل فارغة خالية من البيانات'}
+                        </div>
+                      </div>
+                    </button>
+                  )}
 
                   <button
                     onClick={() => {

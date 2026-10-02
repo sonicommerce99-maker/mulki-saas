@@ -22,6 +22,7 @@ import { SuperAdminDashboard } from './components/superadmin/SuperAdminDashboard
 import { SuspendedAccountNotice } from './components/superadmin/SuspendedAccountNotice';
 import { InstallAppModal } from './components/pwa/InstallAppModal';
 import { UserGuideModal } from './components/help/UserGuideModal';
+import { PricingPlansModal } from './components/pricing/PricingPlansModal';
 import { TermsOfServiceModal } from './components/legal/TermsOfServiceModal';
 import { Building2, User, Wrench, Shield, CheckCircle2, MessageSquare, Layers, Briefcase, Sparkles, FileCheck, Crown, Lock, Download, Smartphone, Play, ShieldCheck, BookOpen, Gift } from 'lucide-react';
 
@@ -34,7 +35,9 @@ export default function App() {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState<boolean>(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
   const [isGuideModalOpen, setIsGuideModalOpen] = useState<boolean>(false);
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState<boolean>(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState<boolean>(false);
+  const [isCleanWorkspace, setIsCleanWorkspace] = useState<boolean>(false);
 
   // SaaS Clients State (Managed by Super Admin)
   const [clients, setClients] = useState<ClientCompany[]>(mockClientCompanies);
@@ -46,12 +49,31 @@ export default function App() {
   const [activeTransactionForReceipt, setActiveTransactionForReceipt] = useState<FinancialTransaction | null>(null);
 
   // Core Data States
-  const [properties] = useState<Property[]>(mockProperties);
+  const [properties, setProperties] = useState<Property[]>(mockProperties);
   const [units, setUnits] = useState<Unit[]>(mockUnits);
   const [leases, setLeases] = useState<Lease[]>(mockLeases);
   const [tickets, setTickets] = useState<MaintenanceTicket[]>(mockMaintenanceTickets);
   const [transactions, setTransactions] = useState<FinancialTransaction[]>(mockTransactions);
   const [technicians] = useState(mockTechnicians);
+
+  // Toggle between Rich Demo Use Case and Clean Empty Workspace
+  const handleToggleCleanMode = () => {
+    if (!isCleanWorkspace) {
+      setProperties([]);
+      setUnits([]);
+      setLeases([]);
+      setTickets([]);
+      setTransactions([]);
+      setIsCleanWorkspace(true);
+    } else {
+      setProperties(mockProperties);
+      setUnits(mockUnits);
+      setLeases(mockLeases);
+      setTickets(mockMaintenanceTickets);
+      setTransactions(mockTransactions);
+      setIsCleanWorkspace(false);
+    }
+  };
 
   // Modals & Navigation triggers
   const [isCreateTicketModalOpen, setIsCreateTicketModalOpen] = useState(false);
@@ -183,13 +205,32 @@ export default function App() {
         onOpenReceiptModal={() => handleOpenReceiptForTx()}
         onOpenInstallModal={() => setIsInstallModalOpen(true)}
         onOpenGuideModal={() => setIsGuideModalOpen(true)}
+        onOpenPricingModal={() => setIsPricingModalOpen(true)}
         onOpenTermsModal={() => setIsTermsModalOpen(true)}
         isTestingSuspendedView={isTestingSuspendedView}
         onToggleSuspendedView={() => setIsTestingSuspendedView(!isTestingSuspendedView)}
+        isCleanMode={isCleanWorkspace}
+        onToggleCleanMode={handleToggleCleanMode}
       />
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+        {/* Workspace Mode Status Pill (Clean Mode vs Demo Mode) */}
+        {isCleanWorkspace && (
+          <div className="bg-blue-50 border border-blue-200 text-blue-950 p-3 rounded-2xl flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <span className="font-bold">أنت الآن في وضع مساحة العمل النظيفة (Clean Mode): المنصة فارغة وجاهزة لإدخال بيانات عقاراتك الفعلية.</span>
+            </div>
+            <button
+              onClick={handleToggleCleanMode}
+              className="px-3 py-1 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition-colors"
+            >
+              استعادة البيانات التوضيحية للعرض
+            </button>
+          </div>
+        )}
 
         {/* Limited-time Free Adopter Banner (مجاني لعدد محدود من المستخدمين) */}
         <div className="bg-gradient-to-r from-amber-50 via-emerald-50/60 to-amber-50 rounded-2xl p-4 border border-amber-200/80 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
@@ -216,6 +257,13 @@ export default function App() {
 
           <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
             <button
+              onClick={() => setIsPricingModalOpen(true)}
+              className="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <span>💎</span>
+              <span>{lang === 'ar' ? 'الباقات والأسعار' : 'Pricing Plans'}</span>
+            </button>
+            <button
               onClick={() => setIsGuideModalOpen(true)}
               className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold border border-slate-200 shadow-xs flex items-center gap-1.5 transition-colors"
             >
@@ -223,8 +271,8 @@ export default function App() {
               <span>{lang === 'ar' ? 'دليل الاستخدام 📖' : 'User Guide 📖'}</span>
             </button>
             <button
-              onClick={() => setIsInstallModalOpen(true)}
-              className="px-4 py-2 rounded-xl bg-[#0F5A47] hover:bg-[#0c4839] text-white font-bold shadow-xs transition-colors"
+              onClick={() => setIsPricingModalOpen(true)}
+              className="px-4 py-2 rounded-xl bg-[#0F5A47] hover:bg-[#0c4839] text-white font-bold shadow-xs transition-colors cursor-pointer"
             >
               {lang === 'ar' ? 'حجز المقعد المجاني' : 'Claim Free License'}
             </button>
@@ -421,6 +469,18 @@ export default function App() {
         isOpen={isGuideModalOpen}
         onClose={() => setIsGuideModalOpen(false)}
         lang={lang}
+      />
+
+      {/* Pricing & Subscription Plans Modal */}
+      <PricingPlansModal
+        isOpen={isPricingModalOpen}
+        onClose={() => setIsPricingModalOpen(false)}
+        lang={lang}
+        currency={currency}
+        onClaimFreeTier={() => {
+          setIsPricingModalOpen(false);
+          setIsInstallModalOpen(true);
+        }}
       />
 
       {/* Terms of Service & Usage Charter Modal (Charte d'utilisation) */}

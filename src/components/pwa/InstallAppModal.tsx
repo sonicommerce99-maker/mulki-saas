@@ -297,6 +297,14 @@ export const InstallAppModal: React.FC<InstallAppModalProps> = ({
                   </p>
                 </div>
               </div>
+
+              {/* In-App Browser (WhatsApp / Messenger) Tip */}
+              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-[11px] flex items-start gap-2">
+                <span className="font-bold shrink-0">💡 ملاحظة هامة:</span>
+                <span>
+                  إذا كنت تفتح الرابط من داخل <strong>WhatsApp</strong> أو تطبيق تواصل، اضغط أولاً على <strong>"Ouvrir dans le navigateur" (فتح في المتصفح)</strong> من قائمة الثلاث نقاط، ثم اضغط على "تثبيت التطبيق".
+                </span>
+              </div>
             </div>
           )}
 

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512" fill="none">
+  <defs>
+    <linearGradient id="MintBg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DCF2DE" />
+      <stop offset="100%" stop-color="#C8E6CA" />
+    </linearGradient>
+    <linearGradient id="PortEmeraldDark" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#177858" />
+      <stop offset="55%" stop-color="#0C563E" />
+      <stop offset="100%" stop-color="#063827" />
+    </linearGradient>
+    <linearGradient id="PortEmeraldMid" x1="0" y1="0" x2="80" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#218E6A" />
+      <stop offset="100%" stop-color="#0E5E44" />
+    </linearGradient>
+    <linearGradient id="PortGold" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F7E099" />
+      <stop offset="50%" stop-color="#D5B05A" />
+      <stop offset="100%" stop-color="#A67E2B" />
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="100" height="100" rx="20" fill="url(#MintBg)" />
+
+  <g transform="translate(0, -10) scale(0.86)" transform-origin="50 45">
+    <path d="M21 40 L36 27 V76 L21 90 Z" fill="url(#PortEmeraldMid)" />
+    <path d="M29 48 L34 43 V74 L29 78 Z" fill="none" stroke="url(#PortGold)" stroke-width="2.5" />
+
+    <path d="M38 20 L55 6 V62 L38 76 Z" fill="url(#PortEmeraldDark)" />
+    <path d="M38 34 L47 26 V64 M47 44 L55 37" fill="none" stroke="url(#PortGold)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M55 6 L71 20 V56 L55 44 Z" fill="none" stroke="url(#PortEmeraldMid)" stroke-width="2.8" stroke-linejoin="round" />
+    <line x1="55" y1="16" x2="71" y2="29" stroke="url(#PortEmeraldMid)" stroke-width="2.8" />
+    <line x1="55" y1="26" x2="71" y2="39" stroke="url(#PortEmeraldMid)" stroke-width="2.8" />
+    <line x1="55" y1="6" x2="55" y2="62" stroke="url(#PortGold)" stroke-width="3.2" stroke-linecap="round" />
+
+    <path d="M27 92 L47 70 L55 78 L71 56 H79 C83 56 86 59 86 63 V85 C86 89 83 92 79 92 H27 Z" fill="url(#PortEmeraldDark)" />
+    <path d="M65 60 H78 C80.5 60 82 61.5 82 64 V84 C82 86.5 80.5 88 78 88 H61" fill="none" stroke="url(#PortGold)" stroke-width="2.2" stroke-linecap="round" />
+    <rect x="67" y="68" width="21" height="12" rx="5" fill="url(#PortEmeraldMid)" stroke="url(#PortGold)" stroke-width="2.3" />
+    <circle cx="73.5" cy="74" r="3" fill="url(#PortGold)" />
+    <line x1="47" y1="70" x2="65" y2="92" stroke="url(#PortGold)" stroke-width="2.2" />
+
+    <path d="M13 92 L46 59 L54 67 L83 36" fill="none" stroke="#D2EBD4" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M18 92 L46 64 L54 72 L82 42" fill="none" stroke="url(#PortGold)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M12 91 L46 57 L54 65 L84 33" fill="none" stroke="url(#PortEmeraldDark)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M71 31 L90 26 L86 45 Z" fill="url(#PortEmeraldDark)" />
+  </g>
+
+  <text x="50" y="87" text-anchor="middle" direction="rtl" font-family="Cairo, system-ui, sans-serif" font-weight="900" font-size="10.2" fill="#B3831E">مَـحْفَظَتِي العَقَارِيَّة</text>
+  <text x="50" y="95" text-anchor="middle" font-family="Plus Jakarta Sans, system-ui, sans-serif" font-weight="800" font-size="4.3" letter-spacing="0.4" fill="#0C563E">MY REAL ESTATE PORTFOLIO</text>
+</svg>

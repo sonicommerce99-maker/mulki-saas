@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مَحْفَظَتِي العَقَارِيَّة | My Real Estate Portfolio - منصة إدارة الأملاك والعقارات</title>
+    <meta name="description" content="منصة مَحْفَظَتِي العَقَارِيَّة (My Real Estate Portfolio) لإدارة العقارات والأملاك في دول الخليج. إدارة العقود، الصيانة، الفواتير والتحصيل." />
+    <meta property="og:title" content="مَحْفَظَتِي العَقَارِيَّة | My Real Estate Portfolio" />
+    <meta property="og:description" content="إدارة ذكية للعقارات، العقود، تذاكر الصيانة، وسندات القبض والفواتير الضريبية الإلكترونية." />
+    <meta property="og:image" content="/pwa-512x512.png?v=12" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Progressive Web App (PWA) Standards -->
+    <link rel="manifest" href="/manifest.json?v=12" />
+    <meta name="theme-color" content="#D2EBD4" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="مَحْفَظَتِي العَقَارِيَّة" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg?v=12" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=12" />
+
+    <!-- Google Fonts for GCC Typography: Cairo & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#F8FAFC] text-slate-900 antialiased selection:bg-[#0F5A47] selection:text-white">
+    <div id="root"></div>
+    
+    <!-- App Entry Point (Loads First) -->
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- PWA Service Worker Registration & Self-Heal -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            reg.update();
+          }).catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "AqarFlow - عقار فلو | GCC Property Management SaaS",
+  "description": "Multi-tenant B2B Real Estate SaaS platform for the GCC region with automated maintenance workflows, rent collection reminders, VAT invoicing, and multi-role access.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

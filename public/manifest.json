@@ -1,9 +1,9 @@
 {
-  "id": "/?app=mahfadati-v12",
+  "id": "/?app=mahfadati-v13",
   "name": "مَحْفَظَتِي العَقَارِيَّة | My Real Estate Portfolio",
   "short_name": "مَحْفَظَتِي العَقَارِيَّة",
   "description": "منصة مَحْفَظَتِي العَقَارِيَّة (My Real Estate Portfolio) لإدارة الأملاك والعقارات الذكية في الخليج. إدارة العقود، الصيانة، الفواتير وسندات القبض ZATCA.",
-  "start_url": "/?pwa=mahfadati-v12",
+  "start_url": "/?pwa=mahfadati-v13",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
@@ -12,28 +12,28 @@
   "categories": ["business", "finance", "productivity"],
   "icons": [
     {
-      "src": "/icon.svg?v=12",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "/pwa-192x192.png?v=12",
+      "src": "/portfolio-logo.jpg?v=13",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/pwa-512x512.png?v=12",
+      "src": "/portfolio-logo.jpg?v=13",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any"
     },
     {
-      "src": "/pwa-512x512.png?v=12",
+      "src": "/portfolio-logo.jpg?v=13",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "maskable"
+    },
+    {
+      "src": "/pwa-512x512.png?v=13",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

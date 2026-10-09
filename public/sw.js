@@ -1,10 +1,10 @@
 // Service Worker for Mulki PropTech PWA
-const CACHE_NAME = 'mahfadati-proptech-v12';
+const CACHE_NAME = 'mahfadati-proptech-v13';
 
 // Only lightweight static assets (no large images pre-fetched during initial page load)
 const STATIC_ASSETS = [
-  '/manifest.json?v=12',
-  '/icon.svg?v=12'
+  '/manifest.json?v=13',
+  '/portfolio-logo.jpg?v=13'
 ];
 
 self.addEventListener('install', (event) => {

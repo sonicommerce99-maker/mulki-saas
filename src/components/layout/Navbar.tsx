@@ -533,7 +533,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             link.click();
                           }
                         };
-                        img.src = '/icon.svg?v=12';
+                        img.src = '/portfolio-logo.jpg?v=13';
                       }}
                       className="w-full text-start px-3 py-2 rounded-xl bg-emerald-50/80 hover:bg-emerald-100 text-[#0F5A47] font-bold flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
@@ -860,7 +860,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       link.click();
                     }
                   };
-                  img.src = '/icon.svg?v=12';
+                  img.src = '/portfolio-logo.jpg?v=13';
                 }}
                 className="col-span-2 p-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-[#0F5A47] font-black flex items-center justify-center gap-2 text-start cursor-pointer"
               >

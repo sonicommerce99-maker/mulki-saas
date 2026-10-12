@@ -84,7 +84,118 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const t = translations[lang];
   const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [logoGalleryOpen, setLogoGalleryOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const allWebsiteLogos = [
+    {
+      id: 'v8-final',
+      titleAr: '8. الشعار الرسمي الذهبي المعتمد (بفتح الميم - مَحْفَظَتِي العَقَارِيَّة)',
+      titleEn: '8. Official Approved Gold Logo (Fatha on Mim)',
+      subtitleAr: 'النسخة المعتمدة حالياً (v13) — كتابة ذهبية مشكّلة بفتح الميم',
+      url: '/logos/8_mahfadati_official_fatha_final.jpg',
+      filename: 'mahfadati-official-gold-fatha-v13.png',
+      badgeAr: 'المعتمد حالياً ⭐',
+    },
+    {
+      id: 'v5-gold-fatha',
+      titleAr: '5. تصميم الشعار الذهبي الفاخر (نجمة إسلامية ذهبية - مَحْفَظَتِي)',
+      titleEn: '5. Luxury Islamic Star Gold Logo (Fatha)',
+      subtitleAr: 'تصميم إطار نجمة ثمانية مع كتابة ذهبية ثلاثية الأبعاد',
+      url: '/logos/5_mahfadati_fatha_v5.jpg',
+      filename: 'mahfadati-gold-star-logo-v5.png',
+      badgeAr: 'تصميم ذهبي فاخر',
+    },
+    {
+      id: 'v6-portfolio-fatha',
+      titleAr: '6. شعار المحفظة العقارية الكلاسيكي الذهبي (بفتح الميم)',
+      titleEn: '6. Classic Portfolio Gold Crest Logo',
+      subtitleAr: 'أيقونة الأبراج الذهبية على خلفية زمردية داكنة',
+      url: '/logos/6_mahfadati_fatha_v6.jpg',
+      filename: 'mahfadati-portfolio-gold-v6.png',
+      badgeAr: 'كلاسيكي ذهبي',
+    },
+    {
+      id: 'v7-app-icon-fatha',
+      titleAr: '7. أيقونة التطبيق المختصرة (App Icon - مَحْفَظَتِي)',
+      titleEn: '7. Compact Mobile App Icon (Fatha)',
+      subtitleAr: 'مخصصة لشاشة الهاتف الرئيسية وأيقونات المتجر',
+      url: '/logos/7_mahfadati_fatha_v7.jpg',
+      filename: 'mahfadati-app-icon-v7.png',
+      badgeAr: 'أيقونة هاتف',
+    },
+    {
+      id: 'v4-mahfadati-damma',
+      titleAr: '4. الشعار الذهبي السابق (النسخة القديمة قبل تعديل حركة الميم)',
+      titleEn: '4. Previous Gold Logo (Before Mim Correction)',
+      subtitleAr: 'النسخة السابقة التي كانت بضم الميم (مُحفظتي)',
+      url: '/logos/4_mahfadati_damma_v4.jpg',
+      filename: 'mahfadati-previous-v4.png',
+      badgeAr: 'نسخة سابقة',
+    },
+    {
+      id: 'v3-portfolio-official',
+      titleAr: '3. شعار محفظتي العقارية (النسخة الأولية)',
+      titleEn: '3. Initial Portfolio Official Logo',
+      subtitleAr: 'التصميم الأولي عند تحويل الهوية إلى محفظتي العقارية',
+      url: '/logos/3_portfolio_v3.jpg',
+      filename: 'portfolio-initial-logo-v3.png',
+      badgeAr: 'نسخة أولية',
+    },
+    {
+      id: 'v2-mulki-icon',
+      titleAr: '2. شعار مُلكي العقاري (النسخة الثانية - Mulki v2)',
+      titleEn: '2. Mulki Real Estate Logo v2',
+      subtitleAr: 'شعار منصة مُلكي (أبراج ذهبية مع خط عربي)',
+      url: '/logos/2_mulki_v2.jpg',
+      filename: 'mulki-logo-v2.png',
+      badgeAr: 'هوية مُلكي سابقاً',
+    },
+    {
+      id: 'v1-mulki-first',
+      titleAr: '1. شعار مُلكي الأول (النسخة التأسيسية الأولى - Mulki v1)',
+      titleEn: '1. First Original Mulki App Icon v1',
+      subtitleAr: 'أول شعار تم تصميمه للمشروع في البداية',
+      url: '/logos/1_mulki_v1.jpg',
+      filename: 'mulki-logo-v1.png',
+      badgeAr: 'النسخة الأولى',
+    },
+    {
+      id: 'v9-vector-svg',
+      titleAr: '9. الشعار الشعاعي الشفاف (Vector SVG Icon)',
+      titleEn: '9. Scalable Vector SVG Logo',
+      subtitleAr: 'ملف فيكتور عالي الدقة للطباعة والتصميم',
+      url: '/logos/9_vector_icon.svg',
+      filename: 'mahfadati-vector-logo.svg',
+      badgeAr: 'Vector SVG',
+    },
+  ];
+
+  const downloadHighResLogo = (url: string, filename: string) => {
+    if (url.endsWith('.svg')) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      return;
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, 1024, 1024);
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      }
+    };
+    img.src = url;
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -514,36 +625,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                   )}
 
                   {/* Download Official Logo Image (High-Res PNG / SVG) */}
-                  <div className="pt-1 border-t border-slate-100">
+                  <div className="pt-1 border-t border-slate-100 space-y-1">
                     <button
                       onClick={() => {
                         setToolsDropdownOpen(false);
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 1024;
-                        canvas.height = 1024;
-                        const ctx = canvas.getContext('2d');
-                        const img = new Image();
-                        img.crossOrigin = 'anonymous';
-                        img.onload = () => {
-                          if (ctx) {
-                            ctx.drawImage(img, 0, 0, 1024, 1024);
-                            const link = document.createElement('a');
-                            link.download = 'mahfadati-logo-1024x1024.png';
-                            link.href = canvas.toDataURL('image/png');
-                            link.click();
-                          }
-                        };
-                        img.src = '/portfolio-logo.jpg?v=13';
+                        setLogoGalleryOpen(true);
                       }}
-                      className="w-full text-start px-3 py-2 rounded-xl bg-emerald-50/80 hover:bg-emerald-100 text-[#0F5A47] font-bold flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full text-start px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold flex items-center gap-2.5 transition-colors cursor-pointer border border-amber-200/80"
                     >
-                      <Download className="w-4 h-4 text-[#0F5A47] shrink-0" />
+                      <Download className="w-4 h-4 text-amber-700 shrink-0" />
                       <div>
                         <div className="font-black">
-                          {lang === 'ar' ? 'تحميل شعار الموقع (Logo PNG) 🖼️' : 'Download Official Logo (PNG) 🖼️'}
+                          {lang === 'ar' ? 'معرض جميع شعارات الموقع (9 شعارات) 🎨' : 'All Website Logos Gallery (9 Logos) 🎨'}
                         </div>
-                        <div className="text-[10px] text-slate-500">
-                          {lang === 'ar' ? 'صورة عالية الدقة 1024×1024 للواتساب والتسويق' : 'High-res 1024×1024 PNG for WhatsApp & branding'}
+                        <div className="text-[10px] text-amber-700">
+                          {lang === 'ar' ? 'استعراض وتحميل جميع النسخ والتصاميم السابقة والحالية' : 'View & download all previous and current logo designs'}
                         </div>
                       </div>
                     </button>
@@ -845,28 +941,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  const canvas = document.createElement('canvas');
-                  canvas.width = 1024;
-                  canvas.height = 1024;
-                  const ctx = canvas.getContext('2d');
-                  const img = new Image();
-                  img.crossOrigin = 'anonymous';
-                  img.onload = () => {
-                    if (ctx) {
-                      ctx.drawImage(img, 0, 0, 1024, 1024);
-                      const link = document.createElement('a');
-                      link.download = 'mahfadati-logo-1024x1024.png';
-                      link.href = canvas.toDataURL('image/png');
-                      link.click();
-                    }
-                  };
-                  img.src = '/portfolio-logo.jpg?v=13';
+                  setLogoGalleryOpen(true);
                 }}
-                className="col-span-2 p-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-[#0F5A47] font-black flex items-center justify-center gap-2 text-start cursor-pointer"
+                className="col-span-2 p-2.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 font-black flex items-center justify-center gap-2 text-start cursor-pointer"
               >
-                <Download className="w-4 h-4 text-[#0F5A47] shrink-0" />
+                <Download className="w-4 h-4 text-amber-700 shrink-0" />
                 <span>
-                  {lang === 'ar' ? 'تحميل شعار الموقع الجديد (Logo PNG) 🖼️' : 'Download Official Logo (PNG) 🖼️'}
+                  {lang === 'ar' ? 'معرض جميع شعارات الموقع (9 شعارات للتحميل) 🎨' : 'All Website Logos Gallery (9 Logos) 🎨'}
                 </span>
               </button>
             </div>
@@ -898,6 +979,86 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
+        </div>
+      )}
+
+      {/* ALL WEBSITE LOGOS GALLERY MODAL */}
+      {logoGalleryOpen && (
+        <div className="fixed inset-0 z-[100] bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+            {/* Modal Header */}
+            <div className="px-5 py-4 bg-gradient-to-r from-[#09382C] to-[#0F5A47] text-white flex items-center justify-between shrink-0">
+              <div>
+                <h3 className="text-base sm:text-lg font-black flex items-center gap-2">
+                  <span>🎨</span>
+                  <span>
+                    {lang === 'ar'
+                      ? 'أرشيف ومعرض جميع شعارات الموقع (من البداية حتى الآن)'
+                      : 'Complete Website Logos Archive & Gallery'}
+                  </span>
+                </h3>
+                <p className="text-xs text-emerald-100/90 mt-0.5">
+                  {lang === 'ar'
+                    ? 'جميع الـ 9 شعارات التي تم تصميمها للمنصة بدقة عالية 1024×1024 جاهزة للعرض والتحميل المباشر'
+                    : 'All 9 high-resolution 1024×1024 logos created for the platform ready for preview and download'}
+                </p>
+              </div>
+              <button
+                onClick={() => setLogoGalleryOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Grid */}
+            <div className="p-4 sm:p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-slate-50">
+              {allWebsiteLogos.map((logo) => (
+                <div
+                  key={logo.id}
+                  className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col overflow-hidden"
+                >
+                  <div className="relative aspect-square bg-[#07261E] flex items-center justify-center p-4 border-b border-slate-100">
+                    <img
+                      src={logo.url}
+                      alt={logo.titleAr}
+                      className="w-full h-full object-contain rounded-xl"
+                    />
+                    <span className="absolute top-3 right-3 px-2.5 py-1 rounded-lg text-[10px] font-black bg-amber-400 text-slate-950 shadow">
+                      {logo.badgeAr}
+                    </span>
+                  </div>
+                  <div className="p-3.5 flex-1 flex flex-col justify-between gap-3">
+                    <div>
+                      <h4 className="font-black text-slate-900 text-xs sm:text-sm leading-snug">
+                        {lang === 'ar' ? logo.titleAr : logo.titleEn}
+                      </h4>
+                      <p className="text-[11px] text-slate-500 mt-1">
+                        {logo.subtitleAr}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => downloadHighResLogo(logo.url, logo.filename)}
+                        className="flex-1 py-2 px-3 rounded-xl bg-[#0F5A47] hover:bg-[#09382C] text-white font-black text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>{lang === 'ar' ? 'تحميل PNG' : 'Download'}</span>
+                      </button>
+                      <a
+                        href={logo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-colors"
+                      >
+                        {lang === 'ar' ? 'فتح الصورة' : 'Open'}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 

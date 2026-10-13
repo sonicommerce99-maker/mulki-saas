@@ -14,7 +14,7 @@ export const MulkiAppIcon: React.FC<{ className?: string }> = ({ className = 'w-
       className={`${className} relative rounded-2xl bg-[#D2EBD4] border border-[#0F5A47]/20 flex items-center justify-center shadow-xs shrink-0 overflow-hidden select-none`}
     >
       <img
-        src="/portfolio-logo.jpg?v=14"
+        src="/portfolio-logo.jpg?v=15"
         alt="مَحْفَظَتِي العَقَارِيَّة"
         className="w-full h-full object-cover"
       />
